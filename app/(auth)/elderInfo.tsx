@@ -10,11 +10,14 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { useRouter } from "expo-router";
+import { db, collection, addDoc } from "../../config/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CaretakerBasicInfo: React.FC = () => {
   const [gender, setGender] = useState("Female");
@@ -29,6 +32,8 @@ const CaretakerBasicInfo: React.FC = () => {
   const [bloodGroup, setBloodGroup] = useState("");
   const [medicalConditions, setMedicalConditions] = useState("");
 
+  const router = useRouter();
+
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);
 
@@ -37,12 +42,39 @@ const CaretakerBasicInfo: React.FC = () => {
     hideDatePicker();
   };
 
-  const router = useRouter();
-  
-    const handleClick = () => {
-       router.push(`../../(tabs)`);
-      
-    };
+  // Handler to upload data to Firestore "users" collection, including email from AsyncStorage
+  const handleUpload = async () => {
+    try {
+      const email = await AsyncStorage.getItem("userEmail");
+      if (!email) {
+        Alert.alert("Error", "User email not found. Please sign in again.");
+        return;
+      }
+      // Upload Elder data to the "users" collection
+      const docRef = await addDoc(collection(db, "users"), {
+        firstName,
+        surname,
+        gender,
+        contact,
+        address,
+        dob,
+        height,
+        weight,
+        bloodGroup,
+        medicalConditions,
+        userType: "elder", // Identify user as an Elder
+        email, // Retrieved from AsyncStorage
+      });
+
+      Alert.alert("Success", "Elder data added successfully!");
+      console.log("Elder added with ID:", docRef.id);
+      router.push(`../../(tabs)`);
+    } catch (error) {
+      console.error("Error adding elder: ", error);
+      Alert.alert("Error", "Failed to add elder data.");
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -61,18 +93,29 @@ const CaretakerBasicInfo: React.FC = () => {
             <View style={styles.row}>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>First Name</Text>
-                <TextInput style={styles.input} value={firstName} onChangeText={setFirstName} />
+                <TextInput
+                  style={styles.input}
+                  value={firstName}
+                  onChangeText={setFirstName}
+                />
               </View>
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Surname</Text>
-                <TextInput style={styles.input} value={surname} onChangeText={setSurname} />
+                <TextInput
+                  style={styles.input}
+                  value={surname}
+                  onChangeText={setSurname}
+                />
               </View>
             </View>
 
             {/* Gender */}
             <View style={styles.genderContainer}>
               <Text style={styles.label}>Gender -</Text>
-              <RadioButton.Group onValueChange={(value) => setGender(value)} value={gender}>
+              <RadioButton.Group
+                onValueChange={(value) => setGender(value)}
+                value={gender}
+              >
                 <View style={styles.genderRow}>
                   <View style={styles.radioOption}>
                     <RadioButton value="Male" color="#E45555" />
@@ -92,17 +135,33 @@ const CaretakerBasicInfo: React.FC = () => {
 
             {/* Contact & Address */}
             <Text style={styles.label}>Contact No.</Text>
-            <TextInput style={styles.input} keyboardType="numeric" value={contact} onChangeText={setContact} />
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={contact}
+              onChangeText={setContact}
+            />
 
             <Text style={styles.label}>Address</Text>
-            <TextInput style={styles.input} value={address} onChangeText={setAddress} />
+            <TextInput
+              style={styles.input}
+              value={address}
+              onChangeText={setAddress}
+            />
 
             {/* Date of Birth */}
             <Text style={styles.label}>Date of Birth</Text>
             <TouchableOpacity onPress={showDatePicker} style={styles.dateInput}>
-              <Text style={dob ? styles.dateText : styles.placeholderText}>{dob || "Select Date"}</Text>
+              <Text style={dob ? styles.dateText : styles.placeholderText}>
+                {dob || "Select Date"}
+              </Text>
             </TouchableOpacity>
-            <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={handleConfirm} onCancel={hideDatePicker} />
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
 
             {/* Basic Health Review */}
             <Text style={styles.sectionTitle}>Basic Health Review</Text>
@@ -110,32 +169,48 @@ const CaretakerBasicInfo: React.FC = () => {
 
             <View style={styles.row}>
               <View style={styles.inputContainer}>
-              <Text style={styles.label}>Height (cm)</Text>
-              <TextInput style={styles.input} keyboardType="numeric" value={height} onChangeText={setHeight} />
+                <Text style={styles.label}>Height (cm)</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="numeric"
+                  value={height}
+                  onChangeText={setHeight}
+                />
               </View>
               <View style={styles.inputContainer}>
-              <Text style={styles.label}>Weight (kg)</Text>
-              <TextInput style={styles.input} keyboardType="numeric" value={weight} onChangeText={setWeight} />
+                <Text style={styles.label}>Weight (kg)</Text>
+                <TextInput
+                  style={styles.input}
+                  keyboardType="numeric"
+                  value={weight}
+                  onChangeText={setWeight}
+                />
               </View>
             </View>
 
-            
-
-            
-
             <Text style={styles.label}>Blood Group</Text>
-            <TextInput style={styles.input} value={bloodGroup} onChangeText={setBloodGroup} />
+            <TextInput
+              style={styles.input}
+              value={bloodGroup}
+              onChangeText={setBloodGroup}
+            />
 
             <Text style={styles.label}>Medical Conditions (if any)</Text>
-            <TextInput style={styles.input} value={medicalConditions} onChangeText={setMedicalConditions} />
+            <TextInput
+              style={styles.input}
+              value={medicalConditions}
+              onChangeText={setMedicalConditions}
+            />
 
             {/* Submit Button */}
-            <TouchableOpacity style={styles.button} onPress={handleClick}>
+            <TouchableOpacity style={styles.button} onPress={handleUpload}>
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
 
             {/* Terms & Conditions */}
-            <Text style={styles.termsText}>By continuing you are agreeing to all T&C proposed.</Text>
+            <Text style={styles.termsText}>
+              By continuing you are agreeing to all T&C proposed.
+            </Text>
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { db, collection, addDoc } from "../../config/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   View,
   Text,
@@ -10,12 +12,12 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import { RadioButton } from "react-native-paper";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { useRouter } from "expo-router";
-
 
 const CaretakerBasicInfo: React.FC = () => {
   const [gender, setGender] = useState("Female");
@@ -29,6 +31,8 @@ const CaretakerBasicInfo: React.FC = () => {
   const [dob, setDob] = useState("");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
+  const router = useRouter();
+
   const showDatePicker = () => setDatePickerVisibility(true);
   const hideDatePicker = () => setDatePickerVisibility(false);
 
@@ -37,11 +41,37 @@ const CaretakerBasicInfo: React.FC = () => {
     hideDatePicker();
   };
 
-  const router = useRouter();
+  // Handler to upload data to the "users" collection, including the email from AsyncStorage
+  const handleUpload = async () => {
+    try {
+      // Retrieve email from AsyncStorage
+      const email = await AsyncStorage.getItem("userEmail");
+      if (!email) {
+        Alert.alert("Error", "User email not found. Please sign in again.");
+        return;
+      }
+      
+      // Add document to "users" collection in Firestore
+      const docRef = await addDoc(collection(db, "users"), {
+        firstName,
+        surname,
+        gender,
+        contact,
+        address,
+        dob,
+        userType: "caretaker",
+        email, 
+      });
 
-  const handleClick = () => {
-     router.push(`../../(tabs)`);
-    
+      Alert.alert("Success", "User data added successfully!");
+      console.log("User added with ID:", docRef.id);
+
+      // Navigate to the next screen after successful upload
+      router.push(`../../(tabs)`);
+    } catch (error) {
+      console.error("Error adding user: ", error);
+      Alert.alert("Error", "Failed to add user data.");
+    }
   };
 
   return (
@@ -176,7 +206,7 @@ const CaretakerBasicInfo: React.FC = () => {
             </View>
 
             {/* Submit Button */}
-            <TouchableOpacity style={styles.button} onPress={handleClick}>
+            <TouchableOpacity style={styles.button} onPress={handleUpload}>
               <Text style={styles.buttonText}>Continue</Text>
             </TouchableOpacity>
 
