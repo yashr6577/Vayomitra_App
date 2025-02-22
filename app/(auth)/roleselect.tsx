@@ -20,17 +20,16 @@ const RoleSelectionScreen = () => {
     fetchRole();
   }, []);
 
-  const handleSignUp = async () => {
+  const handleRegister = async () => {
     if (selectedRole) {
       await AsyncStorage.setItem("userRole", selectedRole);
-      router.push(selectedRole === "careTaker" ? `/caretakerInfo` : `/elderInfo`);
+      router.push({ pathname: "../SignUpScreen", params: { role: selectedRole } });
     }
   };
 
   const handleLogin = async () => {
     if (selectedRole) {
-      await AsyncStorage.setItem("userRole", selectedRole);
-      router.push(selectedRole === "careTaker" ? `/caretakerInfo` : `/elderInfo`);
+      router.push({ pathname: "../LoginScreen", params: { role: selectedRole } });
     }
   };
 
@@ -75,14 +74,14 @@ const RoleSelectionScreen = () => {
       <Text style={styles.signUpText}>Compassionate Care for Every Age. ❤️</Text>
 
       {/* Sign Up Button */}
-      <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp} disabled={!selectedRole}>
+      <TouchableOpacity style={styles.signUpButton} onPress={handleRegister} disabled={!selectedRole}>
         {/* <AntDesign name="google" size={20} color="#fff" style={styles.googleIcon} /> */}
         <Text style={styles.buttonText}>Register</Text>
       </TouchableOpacity>
 
       <Text style={styles.signUpText}>Already Registered...?</Text>
 
-      {/* Sign Up Button */}
+      {/* Login Button */}
       <TouchableOpacity style={styles.signUpButton} onPress={handleLogin} disabled={!selectedRole}>
         {/* <AntDesign name="google" size={20} color="#fff" style={styles.googleIcon} /> */}
         <Text style={styles.buttonText}>Login</Text>
