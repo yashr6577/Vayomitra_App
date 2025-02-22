@@ -27,6 +27,13 @@ const RoleSelectionScreen = () => {
     }
   };
 
+  const handleLogin = async () => {
+    if (selectedRole) {
+      await AsyncStorage.setItem("userRole", selectedRole);
+      router.push(selectedRole === "careTaker" ? `/caretakerInfo` : `/elderInfo`);
+    }
+  };
+
   if (loading) {
     return <ActivityIndicator size="large" color="#FF6B6B" style={styles.loader} />;
   }
@@ -69,10 +76,19 @@ const RoleSelectionScreen = () => {
 
       {/* Sign Up Button */}
       <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp} disabled={!selectedRole}>
-        <AntDesign name="google" size={20} color="#fff" style={styles.googleIcon} />
-        <Text style={styles.buttonText}>Continue with Google</Text>
+        {/* <AntDesign name="google" size={20} color="#fff" style={styles.googleIcon} /> */}
+        <Text style={styles.buttonText}>Register</Text>
+      </TouchableOpacity>
+
+      <Text style={styles.signUpText}>Already Registered...?</Text>
+
+      {/* Sign Up Button */}
+      <TouchableOpacity style={styles.signUpButton} onPress={handleLogin} disabled={!selectedRole}>
+        {/* <AntDesign name="google" size={20} color="#fff" style={styles.googleIcon} /> */}
+        <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
     </View>
+    
   );
 };
 
