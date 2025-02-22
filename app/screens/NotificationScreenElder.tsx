@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
   const router = useRouter();
   const [bgColor, setBgColor] = useState("#fff");
   const [liveLocation, setLiveLocation] = useState("");
-  const SERVER_URL = "http://192.168.235.9:5000"; // 🔥 Replace with your IP
+  const SERVER_URL = "http://192.168.243.9:5000"; // 🔥 Replace with your IP
 
   useEffect(() => {
     async function registerForPushNotifications() {
@@ -84,7 +84,16 @@ export default function WelcomeScreen() {
       console.error("SMS error:", error);
     }
   };
-
+  const makeEmergencyCall = async () => {
+    try {
+      await fetch(`${SERVER_URL}/make-call`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Call error:", error);
+    }
+  };
   const handleSOSPress = async () => {
     setBgColor("#8B0000");
     const locationLink = await getLiveLocation();
@@ -92,6 +101,7 @@ export default function WelcomeScreen() {
       await Promise.all([
         sendSMSToBackend(locationLink),
         sendNotification(locationLink),
+        makeEmergencyCall(),
         playAlarm(),
       ]);
     }
