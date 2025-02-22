@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { Text,View, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesome5 } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +10,7 @@ import HealthScreen from "../screens/HealthScreen";
 import ScheduleScreen from "../screens/ScheduleScreen";
 import ChatScreen from "../screens/ChatScreen";
 import NotificationScreen from "../screens/NotificationScreen";
+import NotificationScreenElder from "../screens/NotificationScreenElder";
 
 const Tab = createBottomTabNavigator();
 
@@ -122,12 +123,13 @@ export default function TabLayout() {
           />
           <Tab.Screen
             name="Notification"
-            component={NotificationScreen}
+            component={NotificationScreenElder}
             options={{
               tabBarButton: (props) => (
                 <TouchableOpacity {...props} style={styles.floatingButton}>
                   <View style={styles.notificationButton}>
-                    <FontAwesome5 name="bell" size={24} color="white" />
+                    {/* <FontAwesome5 name="bell" size={24} color="white" /> */}
+                    <Text style={styles.date}>SOS</Text>
                   </View>
                 </TouchableOpacity>
               ),
@@ -190,5 +192,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+  },
+  date: {
+    fontSize: 14,
+    color: "#fff",
+    marginTop: 4,
+    fontWeight: "bold",
   },
 });
