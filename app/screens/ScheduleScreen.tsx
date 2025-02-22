@@ -1,13 +1,31 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { 
+  View, 
+  Text, 
+  TouchableOpacity, 
+  FlatList, 
+  StyleSheet, 
+  Alert 
+} from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
 import TaskModal from "../../components/TaskModel";
 import TaskItem from "../../components/TaskItem";
+import { 
+  db, 
+  collection, 
+  addDoc, 
+  query, 
+  where, 
+  getDocs, 
+  updateDoc, 
+  arrayUnion 
+} from "../../config/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface Task {
   time: string;
   task: string;
-  elder: string;
+  elder: string; // This field can be ignored now since we'll use AsyncStorage
   status: string;
 }
 
@@ -15,8 +33,8 @@ const ScheduleScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDate());
   const [tasks, setTasks] = useState<{ [date: string]: Task[] }>({
     [getTodayDate()]: [
-      { time: "08:00 AM", task: "Medication", elder: "Mrs. Rao", status: "Done!" },
-      { time: "08:00 AM", task: "BP Check", elder: "Mrs. Rao", status: "NA" },
+      { time: "08:00 AM", task: "Medication", elder: "elder@example.com", status: "Done!" },
+      { time: "08:00 AM", task: "BP Check", elder: "elder@example.com", status: "NA" },
     ],
   });
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -29,12 +47,48 @@ const ScheduleScreen: React.FC = () => {
     setSelectedDate(day.dateString);
   };
 
-  const addTask = (newTask: Task) => {
-    setTasks((prevTasks) => ({
-      ...prevTasks,
-      [selectedDate]: [...(prevTasks[selectedDate] || []), newTask],
-    }));
-    setModalVisible(false);
+  // Add task and update the specified elder's tasks array in the "users" collection
+  const addTask = async (newTask: Task) => {
+    try {
+      // Update local state
+      setTasks((prevTasks) => ({
+        ...prevTasks,
+        [selectedDate]: [...(prevTasks[selectedDate] || []), newTask],
+      }));
+
+      // Add the new task document to Firestore "task" collection
+      const taskDocRef = await addDoc(collection(db, "task"), {
+        ...newTask,
+        date: selectedDate, // Include the selected date for reference
+      });
+      console.log("Task added with ID:", taskDocRef.id);
+
+      // Retrieve the elder's email from AsyncStorage using key "userRole"
+      const elderEmail = await AsyncStorage.getItem("userEmail");
+      if (!elderEmail) {
+        console.warn("No elder email found in AsyncStorage under key 'userRole'");
+      } else {
+        // Query the "users" collection to find the elder by email
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", elderEmail));
+        const querySnapshot = await getDocs(q);
+        if (!querySnapshot.empty) {
+          // Update each matching user document by adding the new task ID to the tasks array
+          querySnapshot.forEach(async (doc) => {
+            await updateDoc(doc.ref, {
+              tasks: arrayUnion(taskDocRef.id),
+            });
+          });
+        } else {
+          console.warn("No user found with email:", elderEmail);
+        }
+      }
+
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error adding task:", error);
+      Alert.alert("Error", "Failed to add task.");
+    }
   };
 
   return (
@@ -85,25 +139,22 @@ const ScheduleScreen: React.FC = () => {
       </View>
 
       {/* Task Modal */}
-      <TaskModal visible={modalVisible} onClose={() => setModalVisible(false)} onAdd={addTask} />
+      <TaskModal 
+        visible={modalVisible} 
+        onClose={() => setModalVisible(false)} 
+        onAdd={addTask} 
+      />
     </View>
   );
 };
 
-// Styles
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff", padding: 20 },
-
-  /* Header */
   headerRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
   header: { fontSize: 24, fontWeight: "bold" },
   highlight: { color: "#ff6b6b" },
   subHeader: { fontSize: 16, color: "#666", marginBottom: 10 },
-
-  /* Calendar */
   calendar: { marginBottom: 10 },
-
-  /* Task Section */
   taskContainer: {
     flex: 1,
     marginTop: 20,
@@ -118,8 +169,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
   },
-
-  /* Table Header */
   taskHeaderRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -129,17 +178,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
   },
-  taskHeader: {
-    textAlign: "center",
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#fff",
-  },
-
-  /* Empty Message */
+  taskHeader: { textAlign: "center", fontSize: 14, fontWeight: "bold", color: "#fff" },
   emptyText: { textAlign: "center", color: "#888", marginTop: 10 },
-
-  /* Add Button */
   addButton: {
     backgroundColor: "#ff6b6b",
     paddingVertical: 10,
@@ -156,4 +196,4 @@ const styles = StyleSheet.create({
   addButtonText: { color: "#fff", fontSize: 14, fontWeight: "bold" },
 });
 
-export default  ScheduleScreen;
+export default ScheduleScreen;
