@@ -55,75 +55,85 @@ export default function App() {
 
       {/* Modal for Adding Medication */}
       <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            {/* Medication Image */}
-            <Image source={require("@/assets/images/medicine.png")} style={styles.medicineImage} />
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      
+      {/* X Button to Close Modal */}
+      <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+        <FontAwesome name="close" size={24} color="#FF3D00" />
+      </TouchableOpacity>
 
-            <Text style={styles.modalTitle}>
-              Add New <Text style={{ color: "#FF3D00" }}>Medication.</Text>
-            </Text>
+      {/* Medication Image */}
+      <Image source={require("@/assets/images/medicine.png")} style={styles.medicineImage} />
 
-            {/* Medicine Name Input */}
-            <View style={styles.inputContainer}>
-              <FontAwesome name="medkit" size={20} color="#FF3D00" style={styles.inputIcon} />
-              <TextInput
-                placeholder="Medicine Name"
-                style={styles.input}
-                onChangeText={(text) => setNewMed({ ...newMed, name: text })}
-                value={newMed.name}
-              />
-            </View>
+      <Text style={styles.modalTitle}>
+        Add New <Text style={{ color: "#FF3D00" }}>Medication.</Text>
+      </Text>
 
-            {/* Medication Type Selection */}
-            <View style={styles.categoryContainer}>
-              {["Tablet", "Drops", "Syrup", "Injection"].map((type) => (
-                <TouchableOpacity key={type} style={styles.categoryButton}>
-                  <Text style={styles.categoryText}>{type}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+      {/* Medicine Name Input */}
+      <View style={styles.inputContainer}>
+        <FontAwesome name="medkit" size={20} color="#FF3D00" style={styles.inputIcon} />
+        <TextInput
+          placeholder="Medicine Name"
+          style={styles.input}
+          onChangeText={(text) => setNewMed({ ...newMed, name: text })}
+          value={newMed.name}
+        />
+      </View>
 
-            {/* Dosage Input */}
-            <View style={styles.inputContainer}>
-              <FontAwesome name="pencil" size={20} color="#FF3D00" style={styles.inputIcon} />
-              <TextInput
-                placeholder="Dose Ex. 2, 5ml"
-                style={styles.input}
-                onChangeText={(text) => setNewMed({ ...newMed, dosage: text })}
-                value={newMed.dosage}
-              />
-            </View>
+      {/* Medication Type Selection */}
+      <View style={styles.categoryContainer}>
+        {["Tablet", "Drops", "Syrup", "Injection"].map((type) => (
+          <TouchableOpacity key={type} style={styles.categoryButton}>
+            <Text style={styles.categoryText}>{type}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
 
-            {/* When to Take Dropdown */}
-            <View style={styles.inputContainer}>
-              <FontAwesome name="clock-o" size={20} color="#FF3D00" style={styles.inputIcon} />
-              <TextInput
-                placeholder="When to Take"
-                style={styles.input}
-                onChangeText={(text) => setNewMed({ ...newMed, schedule: text })}
-                value={newMed.schedule}
-              />
-            </View>
+      {/* Dosage Input */}
+      <View style={styles.inputContainer}>
+        <FontAwesome name="pencil" size={20} color="#FF3D00" style={styles.inputIcon} />
+        <TextInput
+          placeholder="Dose Ex. 2, 5ml"
+          style={styles.input}
+          onChangeText={(text) => setNewMed({ ...newMed, dosage: text })}
+          value={newMed.dosage}
+        />
+      </View>
 
-            {/* Reminder Time */}
-            <View style={styles.inputContainer}>
-              <FontAwesome name="bell" size={20} color="#FF3D00" style={styles.inputIcon} />
-              <TextInput
-                placeholder="Select Reminder Time"
-                style={styles.input}
-                onChangeText={(text) => setNewMed({ ...newMed, time: text })}
-                value={newMed.time}
-              />
-            </View>
+      {/* When to Take Dropdown */}
+      <View style={styles.inputContainer}>
+        <FontAwesome name="clock-o" size={20} color="#FF3D00" style={styles.inputIcon} />
+        <TextInput
+          placeholder="When to Take"
+          style={styles.input}
+          onChangeText={(text) => setNewMed({ ...newMed, schedule: text })}
+          value={newMed.schedule}
+        />
+      </View>
 
-            {/* Add Medication Button */}
-            <TouchableOpacity style={styles.addButton} onPress={addMedication}>
-              <Text style={styles.addButtonText}>Add +</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
+      {/* Reminder Time */}
+      <View style={styles.inputContainer}>
+        <FontAwesome name="bell" size={20} color="#FF3D00" style={styles.inputIcon} />
+        <TextInput
+          placeholder="Select Reminder Time"
+          style={styles.input}
+          onChangeText={(text) => setNewMed({ ...newMed, time: text })}
+          value={newMed.time}
+        />
+      </View>
+
+      {/* Buttons Container */}
+      <View style={styles.buttonContainer}>
+        {/* Add Medication Button */}
+        <TouchableOpacity style={styles.addButton} onPress={addMedication}>
+          <Text style={styles.addButtonText}>Add +</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
+  </View>
+</Modal>
+
     </View>
   );
 }
@@ -295,4 +305,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
   },
+  closeButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    zIndex: 10,
+  },
+  
 });

@@ -7,7 +7,7 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
-import Header from "../../components/Header";
+import Header from "../../components/HeaderElder";
 
 import { ScrollView } from "react-native";
 
