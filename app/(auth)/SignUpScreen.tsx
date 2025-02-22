@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from "react-native";
 import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithCredential } from "firebase/auth";
 import { auth } from "../../config/firebaseConfig";
 import { useRouter } from "expo-router";
@@ -57,6 +57,7 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.container}>
+      <Image source={require("../../assets/images/elderly1.png")} style={styles.medicineImage} />
       <Text style={styles.title}>Create Account</Text>
 
       <TextInput style={styles.input} placeholder="Enter your Email" value={email} onChangeText={setEmail} />
@@ -64,10 +65,6 @@ export default function SignUpScreen() {
 
       <TouchableOpacity style={styles.button} onPress={handleSignUp}>
         <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.googleButton} onPress={() => promptAsync()}>
-        <Text style={styles.googleButtonText}>Sign up with Google</Text>
       </TouchableOpacity>
     </View>
   );
@@ -81,4 +78,5 @@ const styles = StyleSheet.create({
   buttonText: { color: "#fff", fontWeight: "bold", fontSize: 16 },
   googleButton: { marginTop: 15, padding: 12, borderRadius: 8, borderWidth: 1, borderColor: "#e57373", width: "90%", alignItems: "center" },
   googleButtonText: { color: "#e57373", fontWeight: "bold", fontSize: 16 },
+  medicineImage: { width: 100, height: 100, marginBottom: 10 },
 });

@@ -8,9 +8,9 @@ export default function Header() {
     <View style={styles.headerContainer}>
       <View style={styles.textContainer}>
         <Text style={styles.greeting}>
-          👋 Hello, <Text style={styles.name}>Praneet!</Text>
+          👋 Hello, <Text style={styles.name}>Aniket Paraswar!</Text>
         </Text>
-        <Text style={styles.date}>🟡Feb 01, 2025</Text>
+        <Text style={styles.date}>🟡Feb 22, 2025</Text>
         <Text style={styles.date}>🔴At a Glance!</Text>
       </View>
       <FontAwesome5 name="user" size={28} color={"#FFA726"} style={styles.icon} />

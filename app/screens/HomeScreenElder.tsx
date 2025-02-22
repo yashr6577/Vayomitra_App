@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 import Header from "../../components/HeaderElder";
+import UpcomingReminders from "../../components/UpcomingReminders";
 
 import { ScrollView } from "react-native";
 
@@ -70,6 +71,9 @@ export default function HomeScreen() {
               <View key={index} style={[styles.dot, currentIndex === index && styles.activeDot]} />
             ))}
           </View>
+
+          {/* Scrollable Assigned Elders List */}
+            <UpcomingReminders />
         </>
 
       </ScrollView>
