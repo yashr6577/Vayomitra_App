@@ -6,39 +6,80 @@ import {
   TouchableOpacity,
   Modal,
   StyleSheet,
+  ScrollView,
+  Alert,
 } from "react-native";
-import { FlashList } from "@shopify/flash-list"; // ✅ Import FlashList
+import { FlashList } from "@shopify/flash-list"; // For performance
 import { FontAwesome5 } from "@expo/vector-icons";
 import Fontisto from "@expo/vector-icons/Fontisto";
-import { ScrollView } from "react-native";
-
-const initialElders = [
-  { id: "1", name: "Mr. Ishan Mulajkar", age: 69, health: "Good" },
-  { id: "2", name: "Mr. Ishan Mulajkar", age: 69, health: "Average" },
-];
+import { collection, query, where, getDocs, updateDoc, arrayUnion , db } from "../config/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function AssignedElders() {
-  const [elders, setElders] = useState(initialElders);
+  // Local state for displaying assigned elders (if needed)
+  const [elders, setElders] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const [newElder, setNewElder] = useState({ name: "", age: "", health: "Good" });
+  // newElder includes email, name, age and a default health rating
+  const [newElder, setNewElder] = useState({ email: "", name: "", age: "", health: "Good" });
 
-  const addElder = () => {
-    if (newElder.name && newElder.age) {
-      setElders([...elders, { ...newElder, id: Math.random().toString() }]);
-      setNewElder({ name: "", age: "", health: "Good" });
-      setModalVisible(false);
+  const addElder = async () => {
+    // Basic validation: ensure required fields are filled
+    if (newElder.email && newElder.name && newElder.age) {
+      try {
+        // Retrieve caretaker's email from AsyncStorage
+        const caretakerEmail = await AsyncStorage.getItem("userEmail");
+        if (!caretakerEmail) {
+          Alert.alert("Error", "Caretaker email not found.");
+          return;
+        }
+        // Query the users collection for caretaker's document using caretakerEmail
+        const usersRef = collection(db, "users");
+        const caretakerQuery = query(usersRef, where("email", "==", caretakerEmail));
+        const caretakerSnapshot = await getDocs(caretakerQuery);
+        if (caretakerSnapshot.empty) {
+          Alert.alert("Error", "Caretaker not found.");
+          return;
+        }
+        const caretakerDoc = caretakerSnapshot.docs[0];
+        const caretakerId = caretakerDoc.id;
+
+        // Query the users collection for the elder's document using newElder.email
+        const elderQuery = query(usersRef, where("email", "==", newElder.email));
+        const elderSnapshot = await getDocs(elderQuery);
+        if (elderSnapshot.empty) {
+          Alert.alert("Error", "Elder not found. Please ensure the elder's email is correct.");
+          return;
+        }
+        const elderDoc = elderSnapshot.docs[0];
+        const elderId = elderDoc.id;
+
+        // Update the caretaker's document: add the elderId to the elders array field
+        await updateDoc(caretakerDoc.ref, {
+          elders: arrayUnion(elderId),
+        });
+
+        // Update the elder's document: set caretakerAssigned field to caretakerId
+        await updateDoc(elderDoc.ref, {
+          caretakerAssigned: caretakerId,
+        });
+
+        // Optionally update local state to reflect the new assignment (if desired)
+        setElders([...elders, { id: elderId, name: newElder.name, age: newElder.age, health: newElder.health }]);
+        // Reset the form and close modal
+        setNewElder({ email: "", name: "", age: "", health: "Good" });
+        setModalVisible(false);
+      } catch (error) {
+        console.error("Error adding elder:", error);
+        Alert.alert("Error", "Failed to add elder.");
+      }
+    } else {
+      Alert.alert("Error", "Please fill in all fields.");
     }
   };
 
-  const healthColors = {
-    Good: "#28A745",
-    Average: "#FFC107",
-    Severe: "#DC3545",
-  };
-
+  // For local display, you can define styles as needed
   return (
-    <ScrollView style={styles.container} pagingEnabled
-    showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.container} pagingEnabled showsVerticalScrollIndicator={false}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>🔴 Assigned Elders</Text>
@@ -51,17 +92,16 @@ export default function AssignedElders() {
       <FlashList
         data={elders}
         keyExtractor={(item) => item.id}
-        estimatedItemSize={80} // ✅ Required for performance
+        estimatedItemSize={80}
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 20 }}
         keyboardShouldPersistTaps="handled"
         renderItem={({ item }) => (
           <View style={styles.card}>
             <View style={styles.leftSection}>
-              <View style={[styles.healthIndicator, { backgroundColor: healthColors[item.health] }]} />
-              <FontAwesome5 name="user" size={20} color={"#FFA726"} style={styles.icon} />
+              <View style={[styles.healthIndicator, { backgroundColor: item.health === "Good" ? "#28A745" : item.health === "Average" ? "#FFC107" : "#DC3545" }]} />
+              <FontAwesome5 name="user" size={20} color="#FFA726" style={styles.icon} />
               <Text style={styles.healthText}>{item.health} Health</Text>
             </View>
-
             <View style={styles.middleSection}>
               <Text style={styles.name}>{item.name}</Text>
               <Text style={styles.age}>
@@ -69,11 +109,10 @@ export default function AssignedElders() {
               </Text>
               <Text style={styles.task}>Upcoming Exercise Task</Text>
             </View>
-
             <View style={styles.rightSection}>
-              <FontAwesome5 name="heartbeat" size={20} color={"#FFA726"} style={styles.icon} />
+              <FontAwesome5 name="heartbeat" size={20} color="#FFA726" style={styles.icon} />
               <Text style={styles.healthValue}>120/80</Text>
-              <Fontisto name="blood" size={20} color={"red"} style={styles.icon} />
+              <Fontisto name="blood" size={20} color="red" style={styles.icon} />
               <Text style={styles.healthValue}>120/80</Text>
             </View>
           </View>
@@ -86,18 +125,21 @@ export default function AssignedElders() {
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Add Elder</Text>
             <TextInput
+              placeholder="Elder's Email"
+              style={styles.input}
+              value={newElder.email}
+              onChangeText={(text) => setNewElder({ ...newElder, email: text })} />
+            <TextInput
               placeholder="Name"
               style={styles.input}
               value={newElder.name}
-              onChangeText={(text) => setNewElder({ ...newElder, name: text })}
-            />
+              onChangeText={(text) => setNewElder({ ...newElder, name: text })} />
             <TextInput
               placeholder="Age"
               style={styles.input}
               keyboardType="numeric"
               value={newElder.age}
-              onChangeText={(text) => setNewElder({ ...newElder, age: text })}
-            />
+              onChangeText={(text) => setNewElder({ ...newElder, age: text })} />
             <TouchableOpacity onPress={addElder} style={styles.saveButton}>
               <Text style={styles.saveButtonText}>Save</Text>
             </TouchableOpacity>
@@ -242,3 +284,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
