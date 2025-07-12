@@ -106,8 +106,10 @@ npx expo start
 ---
 
 
-## 📬 Contact
+## 📬 Contributers
+1. Yash Rathod
+2. Aniket Paraswar
+3. Praneet Pawar
+4. Ishan Mulajkar
+5. Mayur Pawar
 
-Yash Rathod
-````
-📧 yashr6577@gmail.com
