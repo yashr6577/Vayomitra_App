@@ -88,11 +88,11 @@ npx expo start
 
 | Home | AI Assistant (Saya) | Routine Manager |
 |------|----------------------|------------------|
-| ![Home](screenshots/elder_home.png) | ![Saya](screenshots/elder_saya.png) | ![Routine](screenshots/elder_routine.png) |
+| <img src="screenshots/elder_home.png" width="180"/> | <img src="screenshots/saya.png" width="180"/> | <img src="screenshots/routine.png" width="180"/> |
 
 | SOS Alert | Prescription OCR |
 |----------|-------------------|
-| ![SOS](screenshots/elder_sos.png) | ![OCR](screenshots/elder_ocr.png) |
+| <img src="screenshots/sos.png" width="180"/> | <img src="screenshots/elder_ocr.png" width="180"/> |
 
 ---
 
@@ -100,7 +100,7 @@ npx expo start
 
 | Overview | Emergency Alerts | Medication Tracking |
 |----------|------------------|----------------------|
-| ![Overview](screenshots/caretaker_dashboard.png) | ![Alerts](screenshots/caretaker_alerts.png) | ![Medications](screenshots/caretaker_medications.png) |
+| <img src="screenshots/care_home.png" width="180"/> | <img src="screenshots/remainder.png" width="180"/> | <img src="screenshots/medication.png" width="180"/> |<img src="screenshots/elders.png" width="180"/> |
 
 > ℹ️ Tip: Store your images in a `screenshots/` folder at the root of your project. Use optimized `.png` or `.webp` files for best performance.
 
