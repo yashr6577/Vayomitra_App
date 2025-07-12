@@ -98,9 +98,9 @@ npx expo start
 
 ### 👥 Caretaker Dashboard
 
-| Overview | Emergency Alerts | Medication Tracking |
-|----------|------------------|----------------------|
-| <img src="screenshots/care_home.png" width="180"/> | <img src="screenshots/remainder.png" width="180"/> | <img src="screenshots/medication.png" width="180"/> |<img src="screenshots/elders.png" width="180"/> |
+| Overview | Emergency Alerts | Medication Tracking |Medication Alerts|
+|----------|------------------|---------------------|-----------------|
+| <img src="screenshots/care_home.png" width="180"/> | <img src="screenshots/sos.png" width="180"/> | <img src="screenshots/medication.png" width="180"/> |<img src="screenshots/elders.png" width="180"/> |<img src="screenshots/remainder.png" width="180"/> |
 
 > ℹ️ Tip: Store your images in a `screenshots/` folder at the root of your project. Use optimized `.png` or `.webp` files for best performance.
 
