@@ -20,7 +20,7 @@ import { db, collection, addDoc ,query, where, getDocs, updateDoc, arrayUnion } 
 export default function App() {
   const [modalVisible, setModalVisible] = useState(false);
   const [medications, setMedications] = useState([
-    { id: "2", name: "RGV", time: "1:00 PM", dosage: "1 tablet", schedule: "Before Lunch" },
+    
   ]);
   const [newMed, setNewMed] = useState({ name: "", time: "", dosage: "", schedule: "" });
 

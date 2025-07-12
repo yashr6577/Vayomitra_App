@@ -33,8 +33,7 @@ const ScheduleScreen: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<string>(getTodayDate());
   const [tasks, setTasks] = useState<{ [date: string]: Task[] }>({
     [getTodayDate()]: [
-      { time: "08:00 AM", task: "Medication", elder: "elder@example.com", status: "Done!" },
-      { time: "08:00 AM", task: "BP Check", elder: "elder@example.com", status: "NA" },
+      { time: "08:00 AM", task: "Medication", elder: "Aniket", status: "Done!" },
     ],
   });
   const [modalVisible, setModalVisible] = useState<boolean>(false);

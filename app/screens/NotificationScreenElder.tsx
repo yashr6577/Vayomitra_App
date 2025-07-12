@@ -9,7 +9,7 @@ export default function WelcomeScreen() {
   const router = useRouter();
   const [bgColor, setBgColor] = useState("#fff");
   const [liveLocation, setLiveLocation] = useState("");
-  const SERVER_URL = "http://192.168.235.9:5000"; // 🔥 Replace with your IP
+  const SERVER_URL = "http://192.168.106.1:5000"; // 🔥 Replace with your IP
 
   useEffect(() => {
     async function registerForPushNotifications() {

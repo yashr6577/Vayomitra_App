@@ -26,7 +26,7 @@ app.post("/make-call", async (req, res) => {
   try {
     await client.calls.create({
       twiml: `<Response>
-                <Say loop="3">Help me! I am in an emergency. Caretaker, I am at Government College of Engineering Aurangabad.</Say>
+                <Say loop="3">Help me! I am in an emergency. Caretaker, Konark Solitaire Ambivili ,Kalyan</Say>
               </Response>`,
       from: process.env.TWILIO_PHONE_NUMBER,
       to: process.env.RECEIVER_PHONE_NUMBER,
