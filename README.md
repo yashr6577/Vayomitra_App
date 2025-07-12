@@ -1,52 +1,114 @@
-# Vayomitra_App
+# <img src="screenshots/logo.png" alt="Vayomitra Logo" width="40"/> 🧓 Vayomitra – AI-Powered Elderly Care Assistant App
 
-# Welcome to your Expo app 👋
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An intelligent mobile app built with **React Native** to assist elderly users in health monitoring, emergency management, and daily well-being. Vayomitra leverages AI, NLP, Twilio, and Firebase to ensure safety, ease of use, and reliable communication with caregivers.
 
-## Get started
+---
 
-1. Install dependencies
+## 📱 Overview
 
-   ```bash
-   npm install
-   ```
+**Vayomitra** is designed with empathy and modern technology to provide a digital companion for elderly individuals. Whether it’s managing medications, sending SOS alerts in emergencies, or answering queries via conversational AI — Vayomitra ensures that care is always a tap away.
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## 🚀 Features
 
-In the output, you'll find options to open the app in a
+- ⚠️ **SOS Alert System**
+  - Detects falls using wearable sensors.
+  - Sends real-time **SMS alerts** with **GPS location** to emergency contacts via **Twilio API** within 5 seconds.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- 🧠 **Saya – AI Assistant**
+  - Conversational AI interface to handle user queries using NLP.
+  - Recommends personalized dietary suggestions based on a database of **1,000+ Indian cuisines**.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- 📸 **Prescription OCR**
+  - NLP-based Optical Character Recognition with **98.7% accuracy** to extract and track medication details from scanned prescriptions.
 
-## Get a fresh project
+- ⏰ **Routine Management**
+  - Daily planner to manage medications and schedule.
+  - Sends regular reminders to ensure consistent health and lifestyle routines.
 
-When you're ready, run:
+- 🔐 **User & Caregiver Profiles**
+  - Secure login/signup for elderly users and caregivers via Firebase Auth.
+  - Role-based dashboard and interaction flow.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology      | Description                            |
+|----------------|----------------------------------------|
+| React Native    | Cross-platform mobile development      |
+| Firebase        | Authentication & Real-time DB          |
+| Twilio API      | SMS alerts and communication services  |
+| NLP (spaCy, Tesseract OCR) | Query handling & OCR processing     |
+| Expo            | Rapid mobile development environment   |
+
+---
+
+## 📦 Installation Guide
+
+### 1. Clone the Repository
 
 ```bash
-npm run reset-project
+git clone https://github.com/yourusername/vayomitra.git
+cd vayomitra
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Install Dependencies
+```bash 
+npm install
 
-## Learn more
+```
+### 3. Setup Environment Variables
+```bash
+Create a .env file in the root directory and add your credentials:
 
-To learn more about developing your project with Expo, look at the following resources:
+TWILIO_ACCOUNT_SID=your_twilio_sid
+TWILIO_AUTH_TOKEN=your_twilio_token
+TWILIO_PHONE_NUMBER=+1234567890
+RECEIVER_PHONE_NUMBER=+0987654321
+EMAIL_USER=your_email
+EMAIL_PASS=your_email_password
+SERVER_URL=https://your-backend-api.com
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 4. Run the App
+```bash
+npx expo start
+```
+## 📸 App Snapshots
 
-## Join the community
+> 📍 Below are the UI screenshots for both **Elder** and **Caretaker** dashboards.
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+### 🧓 Elder Dashboard
+
+| Home | AI Assistant (Saya) | Routine Manager |
+|------|----------------------|------------------|
+| ![Home](screenshots/elder_home.png) | ![Saya](screenshots/elder_saya.png) | ![Routine](screenshots/elder_routine.png) |
+
+| SOS Alert | Prescription OCR |
+|----------|-------------------|
+| ![SOS](screenshots/elder_sos.png) | ![OCR](screenshots/elder_ocr.png) |
+
+---
+
+### 👥 Caretaker Dashboard
+
+| Overview | Emergency Alerts | Medication Tracking |
+|----------|------------------|----------------------|
+| ![Overview](screenshots/caretaker_dashboard.png) | ![Alerts](screenshots/caretaker_alerts.png) | ![Medications](screenshots/caretaker_medications.png) |
+
+> ℹ️ Tip: Store your images in a `screenshots/` folder at the root of your project. Use optimized `.png` or `.webp` files for best performance.
+
+---
+
+
+## 📬 Contact
+
+Yash Rathod
+````
+📧 yashr6577@gmail.com
