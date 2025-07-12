@@ -86,9 +86,9 @@ npx expo start
 
 ### 🧓 Elder Dashboard
 
-| Home | AI Assistant (Saya) | Routine Manager |
-|------|----------------------|------------------|
-| <img src="screenshots/elder_home.png" width="180"/> | <img src="screenshots/saya.png" width="180"/> | <img src="screenshots/routine.png" width="180"/> |
+|Role-Based Auth| Home | AI Assistant (Saya) | Routine Manager |
+|---------------|------|-------------------- |-----------------|
+|<img src="screenshots/role_signup.png" width="180"/>| <img src="screenshots/elder_home.png" width="180"/> | <img src="screenshots/saya.png" width="180"/> | <img src="screenshots/routine.png" width="180"/> |
 
 | SOS Alert | Prescription OCR |
 |----------|-------------------|
