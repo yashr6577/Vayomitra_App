@@ -7,13 +7,13 @@
 // // Your web app's Firebase configuration
 // // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // const firebaseConfig = {
-//   apiKey: "AIzaSyBdQq5RUXb3XZSlThrr_o7eV2uMC4kRhlw",
+//   apiKey: "api key",
 //   authDomain: "vayomitra.firebaseapp.com",
 //   projectId: "vayomitra",
 //   storageBucket: "vayomitra.firebasestorage.app",
 //   messagingSenderId: "268139890986",
-//   appId: "1:268139890986:web:5bbc22d0541cab860cb653",
-//   measurementId: "G-L2J0C0M23G"
+//   appId: "app id",
+//   measurementId: " id"
 // };
 
 // // Initialize Firebase
