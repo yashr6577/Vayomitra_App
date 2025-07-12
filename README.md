@@ -1,4 +1,4 @@
-# <img src="screenshots/logo.png" alt="Vayomitra Logo" width="75"/> Vayomitra – AI-Powered Elderly Care Assistant App
+# <img src="screenshots/logo.png" alt="Vayomitra Logo" width="60"/> Vayomitra – AI-Powered Elderly Care Assistant App
 
 
 An intelligent mobile app built with **React Native** to assist elderly users in health monitoring, emergency management, and daily well-being. Vayomitra leverages AI, NLP, Twilio, and Firebase to ensure safety, ease of use, and reliable communication with caregivers.
